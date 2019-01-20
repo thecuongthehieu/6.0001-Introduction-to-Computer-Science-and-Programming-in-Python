@@ -31,19 +31,14 @@ while(head < tail):
     if(num_months > 36):
         if(head != midle):
             head = midle
-        else:
+        elif(tail == 10000):
             print('It is not possible')
             break
-    elif(num_months < 36):
-        if(head != midle):
-            tail = midle
         else:
             print('Steps in bisection search: ',count)
-            print('Best savings rate: ',portion_saved)
+            print('Best savings rate: ',float(tail)/10000)
             break
-    else:
-        print('Steps in bisection search: ',count)
-        print('Best savings rate: ',portion_saved)
-        break
+    elif(num_months <= 36):
+        tail = midle
 
 

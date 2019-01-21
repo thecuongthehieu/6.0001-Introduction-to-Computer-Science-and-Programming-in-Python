@@ -356,7 +356,7 @@ def hangman_with_hints(secret_word):
 
     print('Sorry, you ran out of guesses. The word was ' + secret_word)
 
-hangman_with_hints('apple')
+#hangman_with_hints('apple')
 
 # When you've completed your hangman_with_hint function, comment the two similar
 # lines above that were used to run the hangman function, and then uncomment

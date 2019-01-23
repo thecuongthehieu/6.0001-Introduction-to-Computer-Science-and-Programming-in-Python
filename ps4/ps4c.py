@@ -70,15 +70,18 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
-    
+        #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
+
     def get_message_text(self):
         '''
         Used to safely access self.message_text outside of the class
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,8 +90,9 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
-                
+        #delete this line and replace with your code here
+        return self.valid_words.copy()
+
     def build_transpose_dict(self, vowels_permutation):
         '''
         vowels_permutation (string): a string containing a permutation of vowels (a, e, i, o, u)
@@ -108,9 +112,17 @@ class SubMessage(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        
-        pass #delete this line and replace with your code here
-    
+   
+        #delete this line and replace with your code here
+        transpose_dict = {}
+        for i in range(len(CONSONANTS_LOWER)):
+            transpose_dict[CONSONANTS_LOWER[i]] = CONSONANTS_LOWER[i]
+            transpose_dict[CONSONANTS_UPPER[i]] = CONSONANTS_UPPER[i]
+        for i in range(len(VOWELS_LOWER)):
+            transpose_dict[VOWELS_LOWER[i]] = vowels_permutation[i]
+            transpose_dict[VOWELS_UPPER[i]] = vowels_permutation.upper()[i]
+        return transpose_dict
+
     def apply_transpose(self, transpose_dict):
         '''
         transpose_dict (dict): a transpose dictionary
@@ -119,8 +131,15 @@ class SubMessage(object):
         on the dictionary
         '''
         
-        pass #delete this line and replace with your code here
-        
+        #delete this line and replace with your code here
+        message_text_encrypted = ''
+        for letter in self.message_text:
+            if (letter in transpose_dict):
+                message_text_encrypted += transpose_dict[letter]
+            else:
+                message_text_encrypted += letter
+        return message_text_encrypted
+
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
         '''
@@ -132,7 +151,8 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        #delete this line and replace with your code here
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
@@ -152,8 +172,33 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
-    
+        #delete this line and replace with your code here
+        vowels_permutationList = get_permutations(VOWELS_LOWER)
+        max_validWords = 0
+        message_text_decrypted = self.message_text
+
+        for vowels_permutation in vowels_permutationList:
+            # aeiou = eaiuo 
+            # => aeiou = eaiou
+            vowels_permutation_decrypt = ''
+            for vower in VOWELS_LOWER:
+                vowels_permutation_decrypt += VOWELS_LOWER[vowels_permutation.find(vower)] 
+
+            transpose_dict = self.build_transpose_dict(vowels_permutation_decrypt)
+            tmp_text_decrypted = self.apply_transpose(transpose_dict)
+            tmp_sum = 0
+            
+            for word in tmp_text_decrypted.split():
+                if (is_word(self.valid_words, word)):
+                    tmp_sum += 1 
+            if (tmp_sum > max_validWords):
+                max_validWords = tmp_sum
+                message_text_decrypted = tmp_text_decrypted
+
+        if (max_validWords > 0):
+            return message_text_decrypted
+        else:
+            return self.message_text
 
 if __name__ == '__main__':
 
@@ -162,7 +207,7 @@ if __name__ == '__main__':
     permutation = "eaiuo"
     enc_dict = message.build_transpose_dict(permutation)
     print("Original message:", message.get_message_text(), "Permutation:", permutation)
-    print("Expected encryption:", "Hallu Wurld!")
+    #print("Expected encryption:", "Hallu Wurld!")
     print("Actual encryption:", message.apply_transpose(enc_dict))
     enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     print("Decrypted message:", enc_message.decrypt_message())

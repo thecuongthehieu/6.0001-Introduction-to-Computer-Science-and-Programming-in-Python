@@ -119,7 +119,7 @@ class ProblemSet5(unittest.TestCase):
         dt = timedelta(seconds=5)
         now = datetime(2016, 10, 12, 23, 59, 59)
         now = now.replace(tzinfo=pytz.timezone("EST"))
-        
+
         ancient_time = datetime(1987, 10, 15)
         ancient_time = ancient_time.replace(tzinfo=pytz.timezone("EST"))
         ancient = NewsStory('', '', '', '', ancient_time)
@@ -216,10 +216,11 @@ class ProblemSet5(unittest.TestCase):
         b = NewsStory('', '', "asdfasfd new york city! asfdasdfasdf", '', datetime.now())
         noa = NewsStory('', '', "something somethingnew york city", '', datetime.now())
         nob = NewsStory('', '', "something something new york cities", '', datetime.now())
-
+        
         triggers = [tt, st, self.tt, self.ft]
         stories = [a, b, noa, nob]
         filtered_stories = filter_stories(stories, triggers)
+
         for story in stories:
             self.assertTrue(story in filtered_stories)
         filtered_stories = filter_stories(stories, [self.ft])
